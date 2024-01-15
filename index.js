@@ -1,5 +1,8 @@
 const express = require("express");
+
 const dotenv = require("dotenv");
+dotenv.config();
+
 const flash = require("express-flash");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -11,7 +14,6 @@ const database = require("./config/database");
 const systemConfig = require("./config/system");
 const bodyParser = require('body-parser');
 
-dotenv.config();
 database.connect();
 
 const app = express();

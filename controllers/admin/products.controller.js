@@ -22,10 +22,15 @@ module.exports.index = async (req, res) =>{
         const countProducts = await Product.countDocuments(find);
         const objectPagination = paginationHelper(4, req.query, countProducts);
     
+        const sort = {};
+        if(req.query.sortKey && req.query.sortValue){
+            sort[req.query.sortKey] = req.query.sortValue;
+        } else {
+            sort["position"] = "desc";
+        }
+
         const products = await Product.find(find)
-            .sort({
-                position: "desc"
-            })
+            .sort(sort)
             .limit(objectPagination.limitItems)
             .skip(objectPagination.skip);
     
@@ -128,9 +133,9 @@ module.exports.createPost = async (req, res) => {
         req.body.position = countProducts + 1;
     }
 
-    if(req.file && req.file.filename){
-        req.body.thumbnail = `/uploads/${req.file.filename}`;
-    }
+    // if(req.file && req.file.filename){
+    //     req.body.thumbnail = `/uploads/${req.file.filename}`;
+    // }
 
     const product = new Product(req.body);
 
