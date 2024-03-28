@@ -1,5 +1,6 @@
 extends ../../layout/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
 
 block main
   +alert-error(5000)
@@ -22,6 +23,35 @@ block main
         required
         value=product.title 
       )
+    div(class="form-group")
+      label(for="product_category_id") Danh mục
+      select(
+        name="product_category_id"
+        id="product_category_id"
+        class="form-control"
+      )
+        option(value="") -- Chọn danh mục --
+        if(records)
+          +select-tree(records, 1, product.product_category_id)
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="featured1"
+        name="featured"
+        value="1"
+      )
+      label(for="featured1" class="form-check-label") Nổi bật
+    div(class="form-group form-check form-check-inline")
+      input(
+        type="radio"
+        class="form-check-input"
+        id="featured0"
+        name="featured"
+        value="0"
+        checked
+      )
+      label(for="featured0" class="form-check-label") Không
     div(class="form-group")
       label(for="desc") Mô tả
       textarea(
@@ -61,7 +91,7 @@ block main
         value=product.stock
         min="0"
       )
-    div(class="form-group")
+    div(class="form-group" upload-image)
       label(for="thumbnail") Ảnh
       input(
         type="file"
@@ -70,6 +100,11 @@ block main
         name="thumbnail"
         accept="image/*"
         file-picker
+      )
+      img(
+        src=product.thumbnail
+        class="image-preview"
+        upload-image-preview
       )
     div(class="form-group")
       label(for="position") Vị trí

@@ -8,6 +8,8 @@ const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const methodOverride = require("method-override");
 var path = require('path');
+const moment = require('moment');
+
 const routesClient = require("./routes/client/index.route");
 const routesAdmin = require("./routes/admin/index.route");
 const database = require("./config/database");
@@ -36,6 +38,7 @@ app.use(session({ cookie: { maxAge: 60000 }}));
 app.use(flash());
 
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
+app.locals.moment = moment;
 
 routesClient(app);
 

@@ -5,6 +5,7 @@ include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
 include ../../mixins/sort.pug
+include ../../mixins/moment.pug
 
 block main
     +alert-success(3000)
@@ -72,9 +73,11 @@ block main
                         )
                     th Hình ảnh
                     th Tiêu đề
-                    th Giá
+                    th Giá gốc
+                    th Giảm giá
                     th Vị trí
                     th Trạng thái
+                    th Tạo bởi
                     th Hành động
                 tbody
                     each item, index in Products
@@ -94,6 +97,7 @@ block main
                                 )
                             td #{item.title}
                             td #{item.price}$
+                            td #{item.discountPercentage}%
                             td
                                 input(
                                     type="number"
@@ -117,6 +121,10 @@ block main
                                         data-status=item.status
                                         button-change-status
                                     ) Dừng Hoạt Động
+                            td
+                                p #{item.createdBy.fullName}
+                                if(item.createdBy.createdAt)
+                                    +formatDate(item.createdBy.createdAt)
                             td
                                 a(
                                     href=`/${prefixAdmin}/products/detail/${item.id}`

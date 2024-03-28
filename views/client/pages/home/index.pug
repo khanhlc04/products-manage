@@ -2,18 +2,42 @@ extends ../../layout/default.pug
 include ../../mixins/box-head.pug
 
 block main
-  .container.my-3
+  .section-products-featured.my-5
+    .container
       .row
         .col-12
-          +box-head("Danh sách sản phẩm")
+          +box-head("Sản phẩm nổi bật")
 
       .row
-        .col-4.mb-3
-          .product-item
-            .inner-image
-              img(src="https://i.dummyjson.com/data/products/1/thumbnail.jpg", alt="iPhone 9")
-            .inner-content
-              h3.inner-title iPhone 9
-              .inner-price-new 80$
-              .inner-price-old 100$
-              .inner-discount -20%
+        each item in productsFeatured
+          .col-4.mb-3
+              .product-item
+                .inner-image
+                  img(src=item.thumbnail, alt=item.title)
+                .inner-content
+                  h3.inner-title
+                    a(href=`/products/${item.slug}`) #{item.title}
+                  .inner-price-new #{item.priceNew}$
+                  .inner-price-old #{item.price}$
+                  .inner-discount -#{item.discountPercentage}%
+
+
+  .section-products-featured.my-5
+    .container
+      .row
+        .col-12
+          +box-head("Sản phẩm mới")
+
+      .row
+        each item in productsNew
+          .col-4.mb-3
+            .product-item
+              .inner-image
+                a(href=`/products/detail/${item.slug}`)
+                  img(src=item.thumbnail, alt=item.title)
+              .inner-content
+                h3.inner-title
+                  a(href=`/products/detail/${item.slug}`) #{item.title}
+                .inner-price-new #{item.priceNew}$
+                .inner-price-old #{item.price}$
+                .inner-discount -#{item.discountPercentage}%

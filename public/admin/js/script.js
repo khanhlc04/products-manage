@@ -148,6 +148,7 @@ if(formChangeMulti){
 }
 
 const deleteButtons = document.querySelectorAll("[button-delete]");
+console.log(deleteButtons);
 if(deleteButtons.length > 0){
     const formDelete = document.querySelector("[form-delete-item]");
     const path = formDelete.getAttribute("data-path");
@@ -181,6 +182,19 @@ if(showAlert){
     });
 }
 
+const uploadImage = document.querySelector("[upload-image]");
+if(uploadImage) {
+  const uploadImageInput = uploadImage.querySelector("[upload-image-input]");
+  const uploadImagePreview = uploadImage.querySelector("[upload-image-preview]");
+
+  uploadImageInput.addEventListener("change", (event) => {
+    const [file] = uploadImageInput.files;
+    if (file) {
+      uploadImagePreview.src = URL.createObjectURL(file);
+    }
+  });
+}
+
 const sort = document.querySelector("[sort]");
 if(sort){
     let url = new URL(window.location.href);
@@ -211,5 +225,52 @@ if(sort){
         const string = `${sortKey}-${sortValue}`;
         const optionSelected = sortSelect.querySelector(`option[value="${string}"]`);
         optionSelected.selected=true;
+    }
+}
+
+const tablePermission = document.querySelector("[table-permission]");
+if(tablePermission){
+    const buttonSubmit = document.querySelector("[button-submit");
+    buttonSubmit.addEventListener("click", () =>{
+        const roles = [];
+
+        const rows = tablePermission.querySelectorAll("tr[data-name]");
+        rows.forEach(row => {
+            const name = row.getAttribute("data-name");
+            const inputs = row.querySelectorAll("input");
+            if(name == "id"){
+                inputs.forEach(input => {
+                    const id = input.value;
+                    roles.push({
+                        id: id,
+                        permissions: []
+                    });
+                });
+            } else{
+                inputs.forEach((input, index) => {
+                    if(input.checked){
+                        roles[index].permissions.push(name);
+                    }
+                });
+            }
+        });
+        const formChangePermissions = document.querySelector("[form-change-permission]");
+        const inputRoles = formChangePermissions.querySelector("input[name='roles']");
+        inputRoles.value = JSON.stringify(roles);
+        formChangePermissions.submit();
+    });
+
+    const divRecords = document.querySelector("[data-records]");
+    if(divRecords){
+        const records = JSON.parse(divRecords.getAttribute("data-records"));
+
+        records.forEach((record, index) => {
+            const permissions = record.permissions;
+            permissions.forEach(permission => {
+                const row = tablePermission.querySelector(`[data-name="${permission}"]`);
+                const input = row.querySelectorAll("input")[index];
+                input.checked = true;
+            })
+        })
     }
 }
